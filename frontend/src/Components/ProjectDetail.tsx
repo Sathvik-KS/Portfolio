@@ -1,10 +1,23 @@
 import { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom';
+import {Link} from 'react-router-dom';
+import "../index.css"
+
+let divStyle = {
+    background : "var(--ng-secondary)",
+    border : "1px solid var(--border)",
+    borderRadius : "12px",
+    padding : "32px",
+    marginTop : "40px",
+    maxWidth : "600px",   
+}
+
 
 interface Project{
     id : number;
     title : string;
     description : string;
+    github_link : string;
 }
 
 export default function ProjectDetail(){
@@ -14,8 +27,10 @@ export default function ProjectDetail(){
     useEffect(() => {
         async function getData(){
             const response = await fetch(`http://127.0.0.1:8000/api/projects/${id}/`)
-            const data = await response.json();
-            setProject(data);
+            if(response.ok){
+                const data = await response.json();
+                setProject(data);
+            }
         }
         getData();
     }, [id])
@@ -24,8 +39,12 @@ export default function ProjectDetail(){
 
     return(
         <>
+        <Link to = "/projects" style = {{color : "var(--accent)"}}>Back to projects</Link>
+        <div style = {divStyle}>
             <h1>{project.title}</h1>
             <p>{project.description}</p>
+            {project.github_link && <a href = {project.github_link} target = "_blank" rel = "noopener noreferrer" style = {{color : "var(--accent"}}>View on Github</a> }
+        </div>
         </>
     )
 
