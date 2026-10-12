@@ -1,28 +1,22 @@
 import "../index.css";
 
-interface Project{
-    title: string;
-    description : string;
-
+interface Repo{
+    id : number;
+    name : string;
+    description : string | null;
+    html_url : string;
+    stargazers_count: number;
+    language: string | null;
 }
 
-// let liStyle = {
-    // listStyle : "none",
-    // background : "var(--bg-secondary)",
-    // border : "12px",
-    // borderRadius : "12px",
-    // // width : "260px",
-    // padding : "20px 24px",
-    
-// }
-
-
-export default function Card({title, description} : Project){
+export default function Card({name, description, stargazers_count, language} : Repo){
     return(
         <>
             <li className = "project-card">
-                <h3 style = {{margin : "0 0 8px 0"}}>{title}</h3>
-                <p style = {{color : "var(--text-secondary)", fontSize : "14px"}}>{description}</p>
+                <h3 style = {{margin : "0 0 8px 0"}}>{name}</h3>
+                <p style = {{color : "var(--text-secondary)", fontSize : "14px"}}>{description ?? "No description"}</p>
+                <p style = {{color : "var(--text-secondary)", fontSize : "14px"}}>{stargazers_count} ⭐</p>
+                <p style = {{color : "var(--text-secondary)", fontSize : "14px"}}>{language ?? "Unknown language" }</p>
             </li>
         </>
     )

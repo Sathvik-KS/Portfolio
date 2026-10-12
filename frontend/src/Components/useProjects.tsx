@@ -28,7 +28,7 @@ export default function useProjects() : [Project[], string]{
                 setProjects(data);
                 setStatus("success");
             }
-            catch(error){setStatus("error");}
+            catch{setStatus("error");}
         }
         getData();
     }, []);

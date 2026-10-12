@@ -1,13 +1,37 @@
 # Python / Django
+venv/
+env/
+.venv/
 backend/venv/
+__pycache__/
 backend/**/__pycache__/
-backend/**/*.pyc
+*.py[cod]
 backend/db.sqlite3
+*.sqlite3
+
+# Environment files
+.env
+.env.*
+!.env.example
 
 # React / Node
+node_modules/
 frontend/node_modules/
 frontend/dist/
+dist/
+dist-ssr/
 
-# General
+# Logs and caches
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Editors and OS files
 .vscode/
-.env
+.idea/
+.DS_Store
+Thumbs.db

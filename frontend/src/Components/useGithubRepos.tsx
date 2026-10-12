@@ -24,7 +24,7 @@ export default function useGithubRepos() : [Repo[], Status]{
                 setRepos(data);
                 setStatus("success");
             }
-            catch(error){setStatus("error");}
+            catch{setStatus("error");}
         }
         getData();
     }, []);

@@ -1,12 +1,11 @@
-import useProjects from "./useProjects";
 import useGithubRepos from "./useGithubRepos";
 import Card from "./Card";
 import { Link } from 'react-router-dom'
 
 
-let ul_style = {
+const ul_style = {
   display : "grid",
-  gridTemplateColumns : "repeat(auto-fill, minmax(240px, 1fr)",
+  gridTemplateColumns : "repeat(auto-fill, minmax(240px, 1fr))",
   gap : "20px",
   listStyle : "none",
   padding : "0"
@@ -15,28 +14,22 @@ let ul_style = {
 
 export default function ProjectList(){
 
-  const [projects , projectStatus] = useProjects();
   const [repos , repoStatus] = useGithubRepos();
 
-    // if(projectStatus === "error") return (<p>Failed</p>);
-    // if(projectStatus === "loading") return (<p>Loading ...</p>);
-
-    if(repoStatus === "error") return(<p>No repos</p>);
-    if(repos.length === 0 || repoStatus === "loading")return(<p>Loading...</p>)
+    if(repoStatus === "error") return(<p>Cannot fetch</p>);
+    if(repoStatus === "loading")return(<p>Loading...</p>);
+    if(repos.length === 0 && repoStatus === "success") return (<p>No repos</p>);
 
 
 
   return(
     <>
       <ul style = {ul_style}>
-        {/* {projects.slice(0, 5).map((p) => (
-                <Link key={p.id} to={`/projects/${p.id}`}>
-                    <Card title={p.title} description={p.description} />
+        {repos.slice(0, 5).map((r) => (
+                <Link key={r.id} to={`/projects/${r.name}/`}>
+                    <Card name={r.name} description={r.description} id = {r.id} html_url = {r.html_url} stargazers_count={r.stargazers_count} language = {r.language}/>
                 </Link>
-        ))} */}
-
-          {repos.map(r => <li key = {r.id}>{r.name}</li>)}
-
+        ))}
       </ul>
     </>
   )

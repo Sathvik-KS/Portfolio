@@ -26,7 +26,7 @@ nav{
   gap : 24px;
   height : 40px;
   align-items : center;
-  padding : 20px, 32px;
+  padding : 20px 32px;
   border-bottom : 1px solid var(--border);
 }
 
@@ -52,13 +52,21 @@ a{
 .project-card{
     list-style-type : none;
     background : var(--bg-secondary);
-    border : 12px;
+    border : 1px solid var(--border);
     border-radius : 12px;
-    width : 260px;
+    /* width : 260px; */
     padding : 20px 24px;
 }
 .project-card:hover{
   border-color: var(--accent);
   transform : translateY(-3px);
   transition : all 0.2s ease;
+}
+
+#profile{
+  display : flex;
+  justify-content: center;
+  align-items: center;
+  width : 500px;
+  margin-left : auto;
 }

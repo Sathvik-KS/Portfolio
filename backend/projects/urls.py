@@ -1,5 +1,4 @@
 from rest_framework.routers import DefaultRouter
-from .serializers import ProjectSerializer
 from .views import ProjectViewSet
 
 router = DefaultRouter()
