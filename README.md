@@ -57,6 +57,10 @@ Portfolio/
 
 ```bash
 cd backend
+cp .env.example .env
+# Generate and paste a secret key:
+python -c "from django.core.management.utils import get_random_secret_key; print(get_random_secret_key())"
+
 python -m venv venv
 
 # Windows
@@ -86,15 +90,37 @@ The frontend runs at http://localhost:5173/.
 
 ## Environment variables
 
-The backend runs with development-safe defaults, so no variables are required locally. Override these for non-local environments:
+The backend works out of the box — if `DJANGO_SECRET_KEY` is not set, a random key is
+generated at runtime and a warning is printed to stderr. This is fine for local
+development, but **not suitable for production**. Copy `backend/.env.example` to
+`backend/.env` and generate a real key:
+
+```bash
+cd backend
+cp .env.example .env
+python -c "from django.core.management.utils import get_random_secret_key; print(get_random_secret_key())"
+# paste the generated key into .env as DJANGO_SECRET_KEY
+```
 
 | Variable | Purpose | Default |
 |----------|---------|---------|
-| `DJANGO_SECRET_KEY` | Django secret key | development-only key in `settings.py` |
-| `DJANGO_DEBUG` | Enable debug mode | `True` |
-| `DJANGO_ALLOWED_HOSTS` | Comma-separated allowed hosts | empty (localhost only) |
+| `DJANGO_SECRET_KEY` | Django secret key | random at runtime (dev only) |
+| `DJANGO_DEBUG` | Enable debug mode | `False` |
+| `DJANGO_ALLOWED_HOSTS` | Comma-separated allowed hosts | `localhost,127.0.0.1` |
 
-No environment variables are required for the frontend.
+HTTPS/security hardening is opt-in via env vars (see `backend/.env.example`).
+Set them when deploying behind a TLS-terminating reverse proxy.
+
+The frontend reads configuration from Vite env vars (see `frontend/.env.example`):
+
+| Variable | Purpose | Default |
+|----------|---------|---------|
+| `VITE_GITHUB_USERNAME` | GitHub user whose repos are displayed | `Sathvik-KS` |
+| `VITE_GITHUB_TOKEN` | Optional GitHub token for higher rate limits | none |
+| `VITE_API_BASE_URL` | Django API base URL | `http://127.0.0.1:8000` |
+
+No environment variables are strictly required for the frontend — the defaults work
+out of the box for local development.
 
 ## Database setup and migrations
 
@@ -141,14 +167,21 @@ Backend (`backend/`):
 
 ## Known limitations
 
-- GitHub repository data is fetched anonymously, so it is subject to GitHub's unauthenticated rate limit (60 requests per hour per IP).
+- GitHub repository data is fetched anonymously by default, so it is subject to
+  GitHub's unauthenticated rate limit (60 requests per hour per IP). Set
+  `VITE_GITHUB_TOKEN` to use an authenticated token (5,000 req/hour).
 - CORS is configured for `http://localhost:5173` and `http://127.0.0.1:5173` only.
 - SQLite is used for development and is not intended for production traffic.
 - The Django projects API is not currently consumed by the UI.
+- Rate limiting is configured on the API (100/day anonymous, 1000/day authenticated).
 
 ## Deployment notes
 
-- Set `DJANGO_DEBUG=False`, a real `DJANGO_SECRET_KEY`, and `DJANGO_ALLOWED_HOSTS` for production.
+- Set `DJANGO_DEBUG=False` (the default) and a real `DJANGO_SECRET_KEY` for production.
+- When `DJANGO_DEBUG=False`, Django automatically enables HTTPS hardening
+  (`SECURE_SSL_REDIRECT`, secure cookies, HSTS, clickjacking/XSS protection).
+  Put the server behind a reverse proxy (nginx, Caddy) that terminates TLS.
 - Add the deployed frontend origin to `CORS_ALLOWED_ORIGINS`.
 - Configure `STATIC_ROOT` and run `python manage.py collectstatic` if Django serves static files.
-- Point the frontend at the deployed API and re-enable `useProjects.tsx` if you want project data served from Django.
+- Point the frontend at the deployed API via `VITE_API_BASE_URL` and re-enable
+  `useProjects.tsx` if you want project data served from Django.

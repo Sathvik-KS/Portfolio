@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom';
 import {Link} from 'react-router-dom';
 import "../index.css"
+import { config } from '../config';
 
 const divStyle = {
     background : "var(--bg-secondary)",
@@ -32,7 +33,17 @@ export default function RepoDetail(){
         async function getData(){
             setStatus("loading");
             try {
-                const response = await fetch(`https://api.github.com/repos/Sathvik-KS/${encodeURIComponent(name ?? "")}`)
+                const headers: Record<string, string> = {
+                    'Accept': 'application/vnd.github+json',
+                };
+                if (config.githubToken) {
+                    headers['Authorization'] = `Bearer ${config.githubToken}`;
+                }
+
+                const response = await fetch(
+                    `https://api.github.com/repos/${config.githubUsername}/${encodeURIComponent(name ?? "")}`,
+                    { headers }
+                );
                 if(!response.ok){ setStatus("error"); return; }
                 const data = await response.json();
                 setProject(data);
