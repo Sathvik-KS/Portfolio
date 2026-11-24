@@ -1,0 +1,632 @@
+/* ============================================================
+   Home.css  —  Animations & premium styles
+   ============================================================
+
+   Sections:
+   1.  Keyframe animations
+   2.  Particle canvas & ambient orbs
+   3.  Page wrapper
+   4.  Hero — text side
+   5.  Hero — avatar
+   6.  Scroll-reveal utility
+   7.  GitHub section header
+   8.  Repo grid & spotlight cards
+   9.  Skeleton loading
+   10. Responsive
+   ============================================================ */
+
+
+/* ── 1. KEYFRAMES ─────────────────────────────────────────── */
+
+/* Entrance: slides up and fades in */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(32px); }
+  to   { opacity: 1; transform: translateY(0);    }
+}
+
+/* Plain fade-in for the avatar */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* Spinning conic ring behind avatar */
+@keyframes rotateSlow {
+  to { transform: rotate(360deg); }
+}
+
+/* Pulsing green "online" dot */
+@keyframes pulseGreen {
+  0%, 100% { box-shadow: 0 0 4px 1px #3fb950; }
+  50%       { box-shadow: 0 0 12px 4px #3fb950; }
+}
+
+/* Gradient sweep on the name */
+@keyframes shimmer {
+  0%   { background-position: -200% center; }
+  100% { background-position:  200% center; }
+}
+
+/* Blinking cursor next to typewriter text */
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0; }
+}
+
+/* Card stagger entrance */
+@keyframes cardIn {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0);    }
+}
+
+/* Skeleton shimmer */
+@keyframes skeletonShimmer {
+  0%   { background-position: -400px 0; }
+  100% { background-position:  400px 0; }
+}
+
+/* Floating drift for the ambient orbs */
+@keyframes float1 {
+  0%, 100% { transform: translate(0, 0)   scale(1);    }
+  33%       { transform: translate(30px, -40px) scale(1.05); }
+  66%       { transform: translate(-20px, 20px) scale(0.97); }
+}
+
+@keyframes float2 {
+  0%, 100% { transform: translate(0, 0)   scale(1);    }
+  40%       { transform: translate(-40px, 30px) scale(1.08); }
+  70%       { transform: translate(20px, -20px) scale(0.95); }
+}
+
+/* Section header line drawing in */
+@keyframes drawLine {
+  from { width: 0; }
+  to   { width: 100%; }
+}
+
+
+/* ── 2. PARTICLE CANVAS & ORBS ───────────────────────────── */
+
+/* Full-viewport canvas sits behind everything */
+.particle-canvas {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.6;
+}
+
+/* Large blurred colour blobs — pure atmosphere */
+.orb {
+  position: fixed;
+  border-radius: 50%;
+  filter: blur(100px);
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.12;
+}
+
+.orb-1 {
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle, #58a6ff, transparent 70%);
+  top: -150px;
+  right: -150px;
+  animation: float1 18s ease-in-out infinite;
+}
+
+.orb-2 {
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, #a371f7, transparent 70%);
+  bottom: 100px;
+  left: -200px;
+  animation: float2 22s ease-in-out infinite;
+}
+
+
+/* ── 3. PAGE WRAPPER ─────────────────────────────────────── */
+
+.home-wrapper {
+  position: relative;    /* establishes stacking context above canvas */
+  z-index: 1;
+  padding: 120px 0 80px;
+}
+
+
+/* ── 4. HERO — TEXT SIDE ─────────────────────────────────── */
+
+.hero {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 48px;
+}
+
+.hero-text {
+  flex: 1;
+}
+
+/* Badge: "Hi, I'm" */
+.hero-greeting {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(88, 166, 255, 0.07);
+  border: 1px solid rgba(88, 166, 255, 0.22);
+  border-radius: 100px;
+  padding: 6px 16px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--accent);
+  letter-spacing: 0.04em;
+  margin-bottom: 24px;
+  /* entrance */
+  opacity: 0;
+  animation: fadeUp 0.7s cubic-bezier(0.22, 1, 0.36, 1) forwards 0.1s;
+}
+
+.hero-greeting-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #3fb950;
+  animation: pulseGreen 2.2s ease-in-out infinite;
+}
+
+/* Large name — gradient shimmer */
+.hero-name {
+  font-size: clamp(52px, 7vw, 80px);
+  font-weight: 800;
+  line-height: 1.0;
+  margin: 0 0 10px;
+  letter-spacing: -0.04em;
+  /* Gradient text */
+  background: linear-gradient(
+    120deg,
+    #e6edf3 0%,
+    #58a6ff 35%,
+    #a371f7 65%,
+    #e6edf3 100%
+  );
+  background-size: 250% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  /* Entrance + perpetual shimmer */
+  opacity: 0;
+  animation:
+    fadeUp   0.7s cubic-bezier(0.22, 1, 0.36, 1) forwards 0.25s,
+    shimmer  5s  linear infinite 1.5s;
+}
+
+/* Typewriter role line */
+.hero-role {
+  font-size: clamp(18px, 2.5vw, 23px);
+  font-weight: 500;
+  color: var(--text-secondary);
+  margin: 0 0 22px;
+  min-height: 1.5em;      /* prevents layout jump while text types */
+  opacity: 0;
+  animation: fadeUp 0.7s cubic-bezier(0.22, 1, 0.36, 1) forwards 0.4s;
+}
+
+/* Blinking | cursor rendered by the component */
+.cursor {
+  display: inline-block;
+  margin-left: 2px;
+  color: var(--accent);
+  font-weight: 300;
+  animation: blink 0.9s step-end infinite;
+}
+
+/* Bio */
+.hero-bio {
+  font-size: 16px;
+  color: var(--text-secondary);
+  line-height: 1.8;
+  max-width: 480px;
+  margin: 0 0 36px;
+  opacity: 0;
+  animation: fadeUp 0.7s cubic-bezier(0.22, 1, 0.36, 1) forwards 0.55s;
+}
+
+/* CTA row */
+.hero-cta {
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+  opacity: 0;
+  animation: fadeUp 0.7s cubic-bezier(0.22, 1, 0.36, 1) forwards 0.7s;
+}
+
+/* Filled button */
+.btn-primary {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 28px;
+  border-radius: 10px;
+  font-size: 15px;
+  font-weight: 600;
+  background: var(--accent);
+  color: #0d1117;
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+  overflow: hidden;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* Shine sweep on hover */
+.btn-primary::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(105deg, transparent 40%, rgba(255,255,255,0.3) 50%, transparent 60%);
+  transform: translateX(-100%);
+  transition: transform 0.45s ease;
+}
+
+.btn-primary:hover::after {
+  transform: translateX(100%);
+}
+
+.btn-primary:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 28px rgba(88, 166, 255, 0.4);
+}
+
+/* Outlined button */
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 28px;
+  border-radius: 10px;
+  font-size: 15px;
+  font-weight: 600;
+  background: transparent;
+  color: var(--text);
+  border: 1px solid var(--border);
+  cursor: pointer;
+  text-decoration: none;
+  transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+}
+
+.btn-secondary:hover {
+  border-color: var(--accent);
+  background: rgba(88, 166, 255, 0.07);
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(88, 166, 255, 0.15);
+}
+
+/* Stack pills */
+.hero-stack {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 32px;
+  opacity: 0;
+  animation: fadeUp 0.7s cubic-bezier(0.22, 1, 0.36, 1) forwards 0.85s;
+}
+
+.stack-pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 5px 14px;
+  border-radius: 100px;
+  font-size: 13px;
+  font-weight: 500;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--border);
+  color: var(--text-secondary);
+  transition: border-color 0.2s, color 0.2s, background 0.2s, transform 0.2s;
+  cursor: default;
+}
+
+.stack-pill:hover {
+  border-color: var(--accent);
+  color: var(--text);
+  background: rgba(88, 166, 255, 0.07);
+  transform: translateY(-2px);
+}
+
+
+/* ── 5. HERO — AVATAR ────────────────────────────────────── */
+
+.hero-avatar-wrap {
+  position: relative;
+  flex-shrink: 0;
+  width: 230px;
+  height: 230px;
+  opacity: 0;
+  animation: fadeIn 1s ease forwards 0.6s;
+}
+
+/* Spinning conic gradient ring */
+.hero-avatar-ring {
+  position: absolute;
+  inset: -7px;
+  border-radius: 50%;
+  background: conic-gradient(from 0deg, #58a6ff 0%, #a371f7 50%, #58a6ff 100%);
+  animation: rotateSlow 5s linear infinite;
+  z-index: 0;
+}
+
+/* Dark gap so the ring looks separated */
+.hero-avatar-ring::after {
+  content: '';
+  position: absolute;
+  inset: 4px;
+  border-radius: 50%;
+  background: var(--bg);
+}
+
+.hero-avatar-img {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+  display: block;
+  /* Soft blue aura */
+  filter: drop-shadow(0 0 32px rgba(88, 166, 255, 0.25));
+  transition: filter 0.4s ease;
+}
+
+.hero-avatar-wrap:hover .hero-avatar-img {
+  filter: drop-shadow(0 0 48px rgba(163, 113, 247, 0.4));
+}
+
+
+/* ── 6. SCROLL-REVEAL UTILITY ────────────────────────────── */
+
+/*
+  Elements start hidden. When IntersectionObserver adds
+  "revealed", they animate in.
+*/
+.scroll-reveal {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity 0.75s cubic-bezier(0.22, 1, 0.36, 1),
+              transform 0.75s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.scroll-reveal.revealed {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+
+/* ── 7. GITHUB SECTION HEADER ────────────────────────────── */
+
+.github-section {
+  margin-top: 96px;
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 32px;
+}
+
+.section-title {
+  font-size: 24px;
+  font-weight: 700;
+  margin: 0;
+  letter-spacing: -0.02em;
+  white-space: nowrap;
+}
+
+/* Animated line that draws itself in when section reveals */
+.section-line {
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(to right, var(--border), transparent);
+  transform-origin: left;
+  /* triggers after scroll-reveal fires */
+  transition: width 1s ease 0.4s;
+}
+
+.status-msg {
+  color: var(--text-secondary);
+  font-size: 15px;
+  padding: 16px 0;
+}
+
+
+/* ── 8. REPO GRID & SPOTLIGHT CARDS ──────────────────────── */
+
+.repo-grid {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 16px;
+}
+
+/*
+  The card uses two CSS custom properties set by JS on mouse move:
+    --mx, --my  →  cursor position relative to the card
+  These drive a radial gradient "spotlight" overlay.
+*/
+.repo-card {
+  position: relative;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 22px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  overflow: hidden;
+  /* entrance stagger */
+  opacity: 0;
+  animation: cardIn 0.55s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.repo-card:hover {
+  transform: translateY(-5px) scale(1.01);
+  border-color: rgba(88, 166, 255, 0.5);
+  box-shadow: 0 12px 40px rgba(88, 166, 255, 0.1);
+}
+
+/*
+  Spotlight overlay: a radial gradient centred at --mx, --my.
+  Invisible by default; visible only on hover.
+*/
+.card-spotlight {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  opacity: 0;
+  background: radial-gradient(
+    320px circle at var(--mx, -999px) var(--my, -999px),
+    rgba(88, 166, 255, 0.07),
+    transparent 70%
+  );
+  transition: opacity 0.3s ease;
+  z-index: 0;
+}
+
+.repo-card:hover .card-spotlight {
+  opacity: 1;
+}
+
+/* Make card content sit above the spotlight overlay */
+.repo-card > *:not(.card-spotlight) {
+  position: relative;
+  z-index: 1;
+}
+
+.repo-card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.repo-name {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--accent);
+  text-decoration: none;
+  transition: color 0.15s;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.repo-name:hover { color: #79b8ff; }
+
+.repo-external-icon {
+  flex-shrink: 0;
+  color: var(--text-secondary);
+  opacity: 0;
+  transform: translate(-3px, 3px);
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.repo-card:hover .repo-external-icon {
+  opacity: 1;
+  transform: translate(0, 0);
+}
+
+.repo-desc {
+  font-size: 14px;
+  color: var(--text-secondary);
+  line-height: 1.65;
+  margin: 0;
+  flex: 1;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.repo-card-footer {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  font-size: 13px;
+  color: var(--text-secondary);
+  margin-top: auto;
+  padding-top: 12px;
+  border-top: 1px solid var(--border);
+}
+
+.repo-lang {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.lang-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  background: var(--lang-color, var(--accent));
+}
+
+.repo-stars {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-left: auto;
+}
+
+
+/* ── 9. SKELETON LOADING ─────────────────────────────────── */
+
+.skeleton-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 16px;
+}
+
+.skeleton-card {
+  height: 148px;
+  border-radius: 14px;
+  background: linear-gradient(
+    90deg,
+    var(--bg-secondary) 25%,
+    #1f2937 50%,
+    var(--bg-secondary) 75%
+  );
+  background-size: 400px 100%;
+  animation: skeletonShimmer 1.4s ease-in-out infinite;
+}
+
+
+/* ── 10. RESPONSIVE ──────────────────────────────────────── */
+
+@media (max-width: 768px) {
+  .home-wrapper { padding: 100px 0 60px; }
+
+  .hero {
+    flex-direction: column-reverse;
+    align-items: flex-start;
+    gap: 40px;
+  }
+
+  .hero-avatar-wrap {
+    width: 160px;
+    height: 160px;
+    align-self: center;
+  }
+
+  .hero-bio { max-width: 100%; }
+
+  .repo-grid,
+  .skeleton-grid { grid-template-columns: 1fr; }
+
+  .orb-1, .orb-2 { opacity: 0.07; }
+}

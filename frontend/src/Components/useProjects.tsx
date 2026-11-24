@@ -1,15 +1,10 @@
 import { useEffect, useState } from 'react';
+import { config } from '../config';
 
 interface Project{
     id : number;
     title : string;
     description : string;
-
-    // userId : number;
-    // id : number;
-    // title : string;
-    // body : string;
-
 }
 
 type Status = "success" | "error" | "loading";
@@ -21,8 +16,7 @@ export default function useProjects() : [Project[], string]{
     useEffect(() => {
         async function getData(){
             try{
-                const response = await fetch("http://127.0.0.1:8000/api/projects/");
-                // const response = await fetch("https://jsonplaceholder.typicode.com/posts");
+                const response = await fetch(`${config.apiBaseUrl}/api/projects/`);
                 if(!response.ok){setStatus("error"); return;}
                 const data = await response.json();
                 setProjects(data);
