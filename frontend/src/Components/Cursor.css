@@ -1,0 +1,149 @@
+/* ============================================================
+   Cursor.css  —  Custom two-layer cursor + spark canvas
+   ============================================================
+
+   Sections:
+   1.  Hide the native cursor globally
+   2.  Spark canvas
+   3.  Dot  (exact position, no lag)
+   4.  Ring (lerped position, lags behind)
+   5.  Hover state  — ring expands + blends
+   6.  Click state  — ring squishes
+   ============================================================ */
+
+
+/* ── 1. HIDE NATIVE CURSOR ───────────────────────────────── */
+
+/*
+  We hide the cursor on every element so our canvas/div
+  layers take over completely.
+  Keeping it on <input> and <textarea> so text editing
+  still feels normal.
+*/
+*,
+*::before,
+*::after {
+  cursor: none !important;
+}
+
+input,
+textarea {
+  cursor: text !important;
+}
+
+
+/* ── 2. SPARK CANVAS ─────────────────────────────────────── */
+
+.cursor-canvas {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9998;        /* just below the cursor layers */
+}
+
+
+/* ── 3. DOT ──────────────────────────────────────────────── */
+
+.cursor-dot {
+  position: fixed;
+  top: 0;
+  left: 0;
+
+  /* Size — the transform below positions the centre on the pointer */
+  width: 6px;
+  height: 6px;
+  margin-top: -3px;     /* offset half-size so centre = pointer tip */
+  margin-left: -3px;
+
+  border-radius: 50%;
+  background: #ffffff;
+  pointer-events: none;
+  z-index: 10000;
+
+  /* No transition on the dot — it must be instant */
+  will-change: transform;
+}
+
+/* Dot shrinks and fades when hovering something interactive */
+.cursor-dot--hover {
+  opacity: 0;
+  transform: scale(0) !important;  /* override inline transform */
+}
+
+/* Dot squishes very slightly on click */
+.cursor-dot--click {
+  transform: scale(0.6) !important;
+  background: var(--accent);
+}
+
+
+/* ── 4. RING ──────────────────────────────────────────────── */
+
+.cursor-ring {
+  position: fixed;
+  top: 0;
+  left: 0;
+
+  width: 36px;
+  height: 36px;
+  margin-top: -18px;    /* centre on pointer */
+  margin-left: -18px;
+
+  border-radius: 50%;
+  border: 1.5px solid rgba(88, 166, 255, 0.55);
+  background: transparent;
+  pointer-events: none;
+  z-index: 9999;
+
+  /* Smooth size / opacity transitions */
+  transition:
+    width      0.2s ease,
+    height     0.2s ease,
+    margin     0.2s ease,
+    border     0.2s ease,
+    background 0.2s ease,
+    opacity    0.2s ease;
+
+  will-change: transform;
+}
+
+
+/* ── 5. HOVER STATE ──────────────────────────────────────── */
+
+/*
+  When hovering an interactive element:
+  - Ring grows to 56px
+  - Becomes a filled translucent blob instead of a hollow ring
+  - Border becomes the accent colour at full opacity
+*/
+.cursor-ring--hover {
+  width: 56px;
+  height: 56px;
+  margin-top: -28px;
+  margin-left: -28px;
+  border-color: rgba(88, 166, 255, 0.8);
+  background: rgba(88, 166, 255, 0.07);
+  /* mix-blend-mode makes it look like it "highlights" text under it */
+  mix-blend-mode: screen;
+}
+
+
+/* ── 6. CLICK STATE ──────────────────────────────────────── */
+
+/*
+  Ring snaps down to a small tight circle on mousedown
+*/
+.cursor-ring--click {
+  width: 20px;
+  height: 20px;
+  margin-top: -10px;
+  margin-left: -10px;
+  border-color: #a371f7;
+  background: rgba(163, 113, 247, 0.15);
+  transition:
+    width      0.1s ease,
+    height     0.1s ease,
+    margin     0.1s ease,
+    border     0.1s ease,
+    background 0.1s ease;
+}

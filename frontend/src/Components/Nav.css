@@ -1,0 +1,174 @@
+/* ============================================================
+   Nav.css  —  Frosted-glass floating navbar
+   ============================================================ */
+
+
+/* ── KEYFRAMES ────────────────────────────────────────────── */
+
+@keyframes navDrop {
+  from { opacity: 0; transform: translateX(-50%) translateY(-20px); }
+  to   { opacity: 1; transform: translateX(-50%) translateY(0); }
+}
+
+/* Indicator grows from centre outward */
+@keyframes indicatorIn {
+  from { opacity: 0; width: 0; }
+  to   { opacity: 1; width: 60%; }
+}
+
+@keyframes logoPulse {
+  0%, 100% { opacity: 1;   }
+  50%       { opacity: 0.4; }
+}
+
+
+/* ── HEADER SHELL ─────────────────────────────────────────── */
+
+.nav-header {
+  position: fixed;
+  top: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  /* Match page content width exactly */
+  width: min(1100px, calc(100% - 48px));
+  z-index: 1000;
+
+  background: rgba(13, 17, 23, 0.55);
+  backdrop-filter: blur(20px) saturate(160%);
+  -webkit-backdrop-filter: blur(20px) saturate(160%);
+  border: 1px solid rgba(48, 54, 61, 0.7);
+  border-radius: 16px;
+
+  transition: background 0.3s ease, border-color 0.3s ease,
+              box-shadow 0.3s ease, top 0.3s ease;
+
+  animation: navDrop 0.6s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+
+/* ── INNER LAYOUT: three-column grid ─────────────────────── */
+
+/*
+  Three equal columns: logo | links | github
+  The middle column is centred naturally by the grid.
+  No position:absolute anywhere — nothing clips or overlaps.
+*/
+.nav-inner {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  padding: 0 20px;
+  height: 54px;
+}
+
+
+/* ── LOGO (left column) ───────────────────────────────────── */
+
+.nav-logo {
+  font-size: 20px;
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  color: var(--text);
+  text-decoration: none;
+  line-height: 1;
+  /* stay on the left */
+  justify-self: start;
+  transition: color 0.2s ease;
+}
+
+.nav-logo-dot {
+  color: var(--accent);
+  display: inline-block;
+  animation: logoPulse 3s ease-in-out infinite;
+}
+
+.nav-logo:hover { color: var(--accent); }
+
+
+/* ── NAV LINKS (centre column) ───────────────────────────── */
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  /* grid centres this automatically — no absolute positioning */
+}
+
+.nav-link {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  /* Extra bottom padding gives the indicator room without
+     changing the visual height of the text */
+  padding: 7px 16px 10px;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  text-decoration: none;
+  white-space: nowrap;
+  transition: color 0.2s ease, background 0.2s ease;
+}
+
+.nav-link:hover {
+  color: var(--text);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.nav-link--active {
+  color: var(--text);
+}
+
+/*
+  Indicator: positioned absolutely at the bottom of the link,
+  centred horizontally via left:50% + marginLeft trick so
+  no transform conflict with scaleX.
+*/
+.nav-link-indicator {
+  position: absolute;
+  bottom: 4px;
+  /* centre: start at 50%, then pull back half of own width */
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;               /* starts at 0, animates to 60% */
+  height: 2px;
+  border-radius: 2px;
+  background: var(--accent);
+  box-shadow: 0 0 8px rgba(88, 166, 255, 0.8);
+  animation: indicatorIn 0.35s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+
+/* ── GITHUB ICON (right column) ──────────────────────────── */
+
+.nav-github {
+  /* push to the right end of the right column */
+  justify-self: end;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  color: var(--text-secondary);
+  text-decoration: none;
+  transition: color 0.2s ease, background 0.2s ease, transform 0.2s ease;
+}
+
+.nav-github:hover {
+  color: var(--text);
+  background: rgba(255, 255, 255, 0.07);
+  transform: translateY(-1px);
+}
+
+
+/* ── SCROLLED STATE ───────────────────────────────────────── */
+
+.nav-header--scrolled {
+  top: 10px;
+  background: rgba(13, 17, 23, 0.88);
+  border-color: rgba(48, 54, 61, 1);
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.5),
+    inset 0 1px 0 rgba(255, 255, 255, 0.04);
+}

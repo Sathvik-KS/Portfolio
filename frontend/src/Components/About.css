@@ -1,0 +1,381 @@
+/* ============================================================
+   About.css
+   ============================================================
+
+   Sections:
+   1.  Keyframes
+   2.  Page wrapper
+   3.  Header
+   4.  Bio + quick-facts
+   5.  Skills
+   6.  Timeline
+   7.  Shared utilities (section-header, section-line)
+   8.  Responsive
+   ============================================================ */
+
+
+/* ── 1. KEYFRAMES ─────────────────────────────────────────── */
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(28px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* Dot ping on the timeline */
+@keyframes ping {
+  0%        { transform: scale(1);   opacity: 0.8; }
+  70%, 100% { transform: scale(2.2); opacity: 0; }
+}
+
+
+/* ── 2. PAGE WRAPPER ─────────────────────────────────────── */
+
+.about-wrapper {
+  padding: 100px 0 100px;
+  display: flex;
+  flex-direction: column;
+  gap: 72px;
+}
+
+
+/* ── 3. HEADER ───────────────────────────────────────────── */
+
+.about-header {
+  opacity: 0;
+  animation: fadeUp 0.7s cubic-bezier(0.22, 1, 0.36, 1) forwards 0.1s;
+}
+
+.about-label {
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin: 0 0 16px;
+}
+
+.about-title {
+  font-size: clamp(36px, 5vw, 56px);
+  font-weight: 800;
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+  margin: 0;
+  color: var(--text);
+}
+
+.about-title-accent {
+  /* Gradient text — same palette as the home name */
+  background: linear-gradient(120deg, #58a6ff 0%, #a371f7 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+
+/* ── 4. BIO + QUICK-FACTS ────────────────────────────────── */
+
+.about-bio-section {
+  display: grid;
+  grid-template-columns: 1fr 280px;
+  gap: 48px;
+  align-items: start;
+  opacity: 0;
+  animation: fadeUp 0.7s cubic-bezier(0.22, 1, 0.36, 1) forwards 0.25s;
+}
+
+.about-bio-text p {
+  font-size: 16px;
+  line-height: 1.85;
+  color: var(--text-secondary);
+  margin: 0 0 20px;
+}
+
+.about-bio-text p:last-child {
+  margin-bottom: 0;
+}
+
+.about-link {
+  color: var(--accent);
+  text-decoration: none;
+  border-bottom: 1px solid rgba(88, 166, 255, 0.4);
+  transition: border-color 0.2s, color 0.2s;
+}
+
+.about-link:hover {
+  color: #79b8ff;
+  border-color: #79b8ff;
+}
+
+/* Quick-facts card */
+.about-facts {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  position: sticky;
+  top: 100px;        /* sticks while bio scrolls on tall screens */
+}
+
+.fact-item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.fact-icon {
+  font-size: 22px;
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(88, 166, 255, 0.07);
+  border-radius: 10px;
+}
+
+.fact-label {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  margin: 0 0 2px;
+}
+
+.fact-value {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text);
+  margin: 0;
+}
+
+
+/* ── 5. SKILLS ───────────────────────────────────────────── */
+
+.about-skills-section {
+  opacity: 0;
+  animation: fadeUp 0.7s cubic-bezier(0.22, 1, 0.36, 1) forwards 0.4s;
+}
+
+.skills-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 24px;
+  margin-top: 8px;
+}
+
+.skill-group {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 20px 22px;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.skill-group:hover {
+  border-color: rgba(88, 166, 255, 0.35);
+  box-shadow: 0 4px 20px rgba(88, 166, 255, 0.07);
+}
+
+.skill-category {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin: 0 0 14px;
+}
+
+.skill-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.skill-pill {
+  font-size: 13px;
+  font-weight: 500;
+  padding: 4px 12px;
+  border-radius: 100px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--border);
+  color: var(--text-secondary);
+  transition: color 0.2s, border-color 0.2s, background 0.2s;
+}
+
+.skill-pill:hover {
+  color: var(--text);
+  border-color: var(--accent);
+  background: rgba(88, 166, 255, 0.07);
+}
+
+
+/* ── 6. TIMELINE ─────────────────────────────────────────── */
+
+.about-timeline-section {
+  opacity: 0;
+  animation: fadeUp 0.7s cubic-bezier(0.22, 1, 0.36, 1) forwards 0.55s;
+}
+
+.timeline {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  margin-top: 8px;
+  position: relative;
+}
+
+/* Vertical connecting line */
+.timeline::before {
+  content: '';
+  position: absolute;
+  left: 68px;           /* aligns with the dot centre */
+  top: 10px;
+  bottom: 10px;
+  width: 1px;
+  background: linear-gradient(to bottom, var(--accent), var(--border), transparent);
+}
+
+.timeline-item {
+  display: flex;
+  gap: 32px;
+  padding: 24px 0;
+  position: relative;
+}
+
+.timeline-left {
+  display: flex;
+  align-items: flex-start;
+  gap: 20px;
+  flex-shrink: 0;
+  width: 88px;          /* year (40px) + gap + dot */
+  padding-top: 2px;
+}
+
+.timeline-year {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--accent);
+  width: 40px;
+  text-align: right;
+  line-height: 1.4;
+}
+
+/* Dot on the vertical line */
+.timeline-dot {
+  position: relative;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--accent);
+  flex-shrink: 0;
+  margin-top: 3px;
+  box-shadow: 0 0 8px rgba(88, 166, 255, 0.5);
+}
+
+/* Ping ring around the first dot ("Now") */
+.timeline-item:first-child .timeline-dot::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: var(--accent);
+  animation: ping 1.8s ease-out infinite;
+}
+
+.timeline-content {
+  flex: 1;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--border);
+}
+
+.timeline-item:last-child .timeline-content {
+  border-bottom: none;
+}
+
+.timeline-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text);
+  margin: 0 0 8px;
+}
+
+.timeline-detail {
+  font-size: 14px;
+  color: var(--text-secondary);
+  line-height: 1.75;
+  margin: 0;
+}
+
+
+/* ── 7. SHARED UTILITIES ─────────────────────────────────── */
+
+.section-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 28px;
+}
+
+.section-title {
+  font-size: 22px;
+  font-weight: 700;
+  margin: 0;
+  letter-spacing: -0.02em;
+  white-space: nowrap;
+}
+
+.section-line {
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(to right, var(--border), transparent);
+}
+
+
+/* ── 8. RESPONSIVE ───────────────────────────────────────── */
+
+@media (max-width: 768px) {
+  .about-wrapper {
+    padding: 60px 0 80px;
+    gap: 56px;
+  }
+
+  /* Stack bio + facts card vertically */
+  .about-bio-section {
+    grid-template-columns: 1fr;
+  }
+
+  .about-facts {
+    position: static;   /* un-stick on mobile */
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .skills-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  /* Tighten timeline on small screens */
+  .timeline::before { left: 54px; }
+
+  .timeline-left { width: 72px; }
+}
+
+@media (max-width: 480px) {
+  .about-facts {
+    grid-template-columns: 1fr;
+  }
+
+  .skills-grid {
+    grid-template-columns: 1fr;
+  }
+}

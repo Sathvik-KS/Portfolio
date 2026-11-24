@@ -4,12 +4,12 @@ import RepoDetail from './Components/RepoDetail';
 import Home from './Components/Home';
 import About from './Components/About';
 import Nav from './Components/Nav';
-
-
+import CustomCursor from './Components/Cursor';
 
 export default function App(){
     return(
         <BrowserRouter>
+            <CustomCursor />
             <Nav/>
             <Routes>
                 <Route path = "/" element = {<Home/>}></Route>
